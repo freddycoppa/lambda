@@ -78,18 +78,19 @@ public class Parser {
 							token = nextToken();
 							if (token.type == Token.Type.DOT) {
 								Term t = nextTerm();
-								if (t != null) /* if (passed()) */ term = new Abstraction(v, t);
-								else raise(new Error("Expected a term!", token.pos));
-							} 
-              else raise(new Error("Expected a dot!", token.pos));
-						} 
-            else raise(new Error("Expected a dot!", token.pos));
-					} 
-          else raise(new Error("Expected a variable!", token.pos));
-				} 
-        else raise(new Error("Expected a variable!", token.pos));
-			} 
-      else if (token.type == Token.Type.ID) {
+								if (t != null)
+									/* if (passed()) */ term = new Abstraction(v, t);
+								else
+									raise(new Error("Expected a term!", token.pos));
+							} else
+								raise(new Error("Expected a dot!", token.pos));
+						} else
+							raise(new Error("Expected a dot!", token.pos));
+					} else
+						raise(new Error("Expected a variable!", token.pos));
+				} else
+					raise(new Error("Expected a variable!", token.pos));
+			} else if (token.type == Token.Type.ID) {
 				if (!variables.containsKey(token.value)) {
 					// variables.put(token.value, new Variable(token.value));
 					push(new Variable(token.value));
@@ -104,20 +105,23 @@ public class Parser {
 						pop(index);
 					}
 				}
-			} 
-      else if (token.type == Token.Type.OPEN_PAREN) {
+			} else if (token.type == Token.Type.OPEN_PAREN) {
 				List<Token> subTokens = new LinkedList<Token>();
 				int parens = 1;
 				while (parens != 0 && hasNext()) {
 					token = nextToken();
-					if (token.type == Token.Type.OPEN_PAREN) parens++;
-					else if (token.type == Token.Type.CLOSE_PAREN) parens--;
+					if (token.type == Token.Type.OPEN_PAREN)
+						parens++;
+					else if (token.type == Token.Type.CLOSE_PAREN)
+						parens--;
 					subTokens.add(token);
 				}
-				if (parens != 0) raise(new Error("Expected ')'!", token.pos));
+				if (parens != 0)
+					raise(new Error("Expected ')'!", token.pos));
 				else {
 					subTokens.remove(subTokens.size() - 1); // removing the ')' token from the end of the list
-					Parser subParser = new Parser(subTokens, variables, stack); // the subParser inherits all of the variables from this parser
+					Parser subParser = new Parser(subTokens, variables, stack); // the subParser inherits all of the
+																				// variables from this parser
 					term = subParser.nextTerm();
 					raise(subParser.error); // if subParser.error is null, this doesn't make a difference
 					if (passed()) {
@@ -132,8 +136,8 @@ public class Parser {
 						}
 					}
 				}
-			} 
-      else raise(new Error("Expected a term!", token.pos));
+			} else
+				raise(new Error("Expected a term!", token.pos));
 		}
 		return term;
 	}
